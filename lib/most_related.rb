@@ -24,11 +24,14 @@ module MostRelated
   #     belongs_to :post
   #   end
   #
-  #   To return the posts with the most authors in common with post, in descending order:
+  # To return the posts with the most authors in common with post, in descending order:
   #   post.most_related
   #
-  #   To return the posts with the most tags in common with post, in descending order:
-  #   post.most_related_by_tags
+  # To return the posts with the most tags in common with post, in descending order:
+  #   post.most_related_by_tag
+  #
+  # The count of the many to many associations in common is accessible on each returned model
+  # eg post.most_related_count and post.most_related_by_tag_count
   #
   def has_most_related(many_to_many_association, as: :most_related)
 
@@ -38,14 +41,14 @@ module MostRelated
       many_to_many_assocation = self.class.reflect_on_association(many_to_many_association)
       join_table, foreign_key, association_foreign_key = self.class.join_table_values(many_to_many_assocation)
 
-      self.class.select("#{table_name}.*, count(#{table_name}.id) AS common_count").
+      self.class.select("#{table_name}.*, count(#{table_name}.id) AS #{as}_count").
         where("#{join_table}.#{association_foreign_key} IN " +
           "(select #{join_table}.#{association_foreign_key} from #{join_table} where #{join_table}.#{foreign_key} = :foreign_key)",
           foreign_key: self.id).
         where.not(id: self.id).
         joins("INNER JOIN #{join_table} ON #{join_table}.#{foreign_key} = #{table_name}.id").
         group("#{table_name}.id").
-        order('common_count DESC')
+        order("#{as}_count DESC")
     end
 
     def self.join_table_values(many_to_many_assocation)

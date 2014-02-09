@@ -12,25 +12,27 @@ describe Post do
 
   context 'has_many through:' do
     it 'return posts that have the most authors in common with post' do
-      post = Post.create!(authors: [author1, author2, author3])
-      post1 = Post.create!(authors: [author1, author4])
-      post2 = Post.create!(authors: [author1, author2])
-      post3 = Post.create!(authors: [author4])
-      post4 = Post.create!(authors: [author1, author2, author3])
+      post = Post.create! authors: [author1, author2, author3]
+      post1 = Post.create! authors: [author1, author4]
+      post2 = Post.create! authors: [author1, author2]
+      post3 = Post.create! authors: [author4]
+      post4 = Post.create! authors: [author1, author2, author3]
 
+      expect(post.most_related.map(&:most_related_count)).to eq([3, 2, 1])
       expect(post.most_related).to eq([post4, post2, post1])
     end
   end
 
   context 'has_and_belongs_to_many' do
     it 'return posts that have the most tags in common with post' do
-      post = Post.create!(tags: [tag1, tag2, tag3])
-      post1 = Post.create!(tags: [tag1, tag4])
-      post2 = Post.create!(tags: [tag1, tag2])
-      post3 = Post.create!(tags: [tag4])
-      post4 = Post.create!(tags: [tag1, tag2, tag3])
+      post = Post.create! tags: [tag1, tag2, tag3]
+      post1 = Post.create! tags: [tag1, tag4]
+      post2 = Post.create! tags: [tag1, tag2]
+      post3 = Post.create! tags: [tag4]
+      post4 = Post.create! tags: [tag1, tag2, tag3]
 
-      expect(post.most_related_by_tags).to eq([post4, post2, post1])
+      expect(post.most_related_by_tag.map(&:most_related_by_tag_count)).to eq([3, 2, 1])
+      expect(post.most_related_by_tag).to eq([post4, post2, post1])
     end
   end
 end
