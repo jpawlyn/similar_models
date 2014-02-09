@@ -11,6 +11,8 @@ load 'support/schema.rb'
 
 require 'most_related'
 require 'support/models'
+require 'support/string'
+
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
