@@ -31,8 +31,11 @@ module MostRelated
   # To return the posts with the most tags in common with post, in descending order:
   #   post.most_related_by_tag
   #
+  # To return the posts with the most authors and tags in common with post, in descending order:
+  #   post.most_related_by_author_or_tag
+  #
   # The count of the many to many associated models in common is accessible on each returned model
-  #   eg post.most_related_count and post.most_related_by_tag_count
+  #   eg post.most_related_count, post.most_related_by_tag_count and post.most_related_by_author_or_tag
   #
   def has_most_related(many_to_many_associations, as: :most_related)
 

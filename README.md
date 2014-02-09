@@ -1,6 +1,6 @@
 # MostRelated
 
-TODO: Write a gem description
+`most_related` returns models that have the most many to many associated models in common
 
 ## Installation
 
@@ -18,7 +18,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Post example
+
+    class Post < ActiveRecord::Base
+      has_most_related :authors
+      has_most_related :tags, as: :most_related_by_tags
+      has_most_related [:authors, :tags], as: :most_related_by_author_or_tag
+
+      has_many :author_posts
+      has_many :authors, through: :author_posts
+    end
+
+    class Author < ActiveRecord::Base
+      has_many :author_posts
+    end
+
+    class AuthorPosts < ActiveRecord::Base
+      belongs_to :author
+      belongs_to :post
+    end
+
+To return the posts with the most authors in common with post, in descending order:
+    post.most_related
+
+To return the posts with the most tags in common with post, in descending order:
+    post.most_related_by_tag
+
+To return the posts with the most authors and tags in common with post, in descending order:
+    post.most_related_by_author_or_tag
+
+The count of the many to many associated models in common is accessible on each returned model
+    post.most_related_count
+    post.most_related_by_tag_count
+    post.most_related_by_author_or_tag
+
+If multiple many to many associations are used, the syntax is specific to MySql.
+
+Because the use of 'group', pagination is not supported.
 
 ## Contributing
 

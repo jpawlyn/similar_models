@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = MostRelated::VERSION
   spec.authors       = ["Jolyon Pawlyn"]
   spec.email         = ["jolyon.pawlyn@unboxedconsulting.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{Adds an instance method to a active record model that returns the most related models based on many to many associated models in common}
+  spec.summary       = %q{Returns models that have the most many to many associated models in common}
   spec.homepage      = ""
   spec.license       = "MIT"
 
