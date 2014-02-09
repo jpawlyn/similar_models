@@ -2,8 +2,8 @@ require "most_related/version"
 
 module MostRelated
 
-  # most_related returns those models that have the most
-  # specified many to many associations in common
+  # `most_related` returns those models that have the most
+  # many to many associated models in common
   #
   # Post example:
   #
@@ -30,8 +30,8 @@ module MostRelated
   # To return the posts with the most tags in common with post, in descending order:
   #   post.most_related_by_tag
   #
-  # The count of the many to many associations in common is accessible on each returned model
-  # eg post.most_related_count and post.most_related_by_tag_count
+  # The count of the many to many associated models in common is accessible on each returned model
+  #   eg post.most_related_count and post.most_related_by_tag_count
   #
   def has_most_related(many_to_many_association, as: :most_related)
 
