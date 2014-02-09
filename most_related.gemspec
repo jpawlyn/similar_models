@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["jolyon.pawlyn@unboxedconsulting.com"]
   spec.description   = %q{Adds an instance method to a active record model that returns the most related models based on many to many associated models in common}
   spec.summary       = %q{Returns models that have the most many to many associated models in common}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/jpawlyn/most_related"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
