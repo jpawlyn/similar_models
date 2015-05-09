@@ -35,7 +35,7 @@ module MostRelated
   #   post.most_related_by_author_or_tag
   #
   # The count of the many to many associated models in common is accessible on each returned model
-  #   eg post.most_related_count, post.most_related_by_tag_count and post.most_related_by_author_or_tag
+  #   eg post.most_related_count, post.most_related_by_tag_count and post.most_related_by_author_or_tag_count
   #
   def has_most_related(many_to_many_associations, as: :most_related)
 
@@ -60,6 +60,8 @@ module MostRelated
           joins("INNER JOIN #{join_table} ON #{join_table}.#{foreign_key} = #{table_name}.id")
       end
 
+      # with postgres, multiple many-to-many associations doesn't work and here's why
+      # http://dba.stackexchange.com/questions/88988/postgres-error-column-must-appear-in-the-group-by-clause-or-be-used-in-an-aggre
       scope = self.class.select("#{table_name}.*, count(#{table_name}.id) AS #{as}_count").
         where.not(id: self.id).group("#{table_name}.id").order("#{as}_count DESC")
 
@@ -68,7 +70,7 @@ module MostRelated
         scope.merge(association_scopes.first)
       else
         # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/
-        scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) #{table_name}")
+        scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}")
       end
     end
 

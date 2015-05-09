@@ -37,30 +37,16 @@ describe Post do
   end
 
   context "combination of 'has_many through:' and habtm" do
-    let(:post)  { Post.create! authors: [author1, author2, author3], tags: [tag1, tag2, tag3] }
-    let(:post1) { Post.create! authors: [author1, author2, author3], tags: [tag1, tag2, tag4] }
-    let(:post2) { Post.create! authors: [author1, author4] }
-    let(:post3) { Post.create! tags: [tag4] }
-    let(:post4) { Post.create! authors: [author1], tags: [tag1, tag2, tag3] }
+    let!(:post)  { Post.create! authors: [author1, author2, author3], tags: [tag1, tag2, tag3] }
+    let!(:post1) { Post.create! authors: [author1, author2, author3], tags: [tag1, tag2, tag4] }
+    let!(:post2) { Post.create! authors: [author1, author4] }
+    let!(:post3) { Post.create! tags: [tag4] }
+    let!(:post4) { Post.create! authors: [author1], tags: [tag1, tag2, tag3] }
 
     it 'return posts that have the most authors and tags in common with post' do
-      pending 'Does not work with sqlite - mysql only perhaps?'
+      # note, this test currently only passes with MySQL
       expect(post.most_related_by_author_or_tag.map(&:most_related_by_author_or_tag_count)).to eq([5, 4, 1])
       expect(post.most_related_by_author_or_tag).to eq([post1, post4, post2])
-    end
-
-    it 'sql check' do
-      expect(post.most_related_by_author_or_tag.where_clauses).to eq(["(\"posts\".\"id\" != #{post.id})"])
-      expect(post.most_related_by_author_or_tag.order_clauses).to eq(["most_related_by_author_or_tag_count DESC"])
-      sql = <<-eos
-        SELECT posts.*, count(posts.id) AS most_related_by_author_or_tag_count FROM
-          ((SELECT \"posts\".* FROM \"posts\" INNER JOIN author_posts ON author_posts.post_id = posts.id WHERE
-            (author_posts.author_id IN (select author_posts.author_id from author_posts where author_posts.post_id = #{post.id})))
-          UNION ALL (SELECT \"posts\".* FROM \"posts\" INNER JOIN posts_tags ON posts_tags.post_id = posts.id WHERE
-            (posts_tags.tag_id IN (select posts_tags.tag_id from posts_tags where posts_tags.post_id = #{post.id})))) posts
-        WHERE (\"posts\".\"id\" != #{post.id}) GROUP BY posts.id  ORDER BY most_related_by_author_or_tag_count DESC
-      eos
-      expect(post.most_related_by_author_or_tag.to_sql.squish!).to eq(sql.squish!)
     end
   end
 end

@@ -54,9 +54,10 @@ The count of the many to many associated models in common is accessible on each 
 
     post.most_related_count
     post.most_related_by_tag_count
-    post.most_related_by_author_or_tag
+    post.most_related_by_author_or_tag_count
 
-If multiple many to many associations are used, the syntax is specific to MySql.
+If multiple many to many associations are used, the syntax is specific to MySql although
+it could be made to work with Postgres.
 
 Because of the use of 'group', pagination is not supported.
 

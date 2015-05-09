@@ -6,13 +6,18 @@
 
 # see http://blog.markstarkman.com/blog/2013/01/23/using-sqlite-to-test-active-record-models/
 require 'active_record'
-ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+
+ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'most_related'
+# ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
+# ActiveRecord::Base.establish_connection adapter: 'postgresql', database: 'most_related'
 load 'support/schema.rb'
 
 require 'most_related'
 require 'support/models'
-require 'support/string'
+require 'database_cleaner'
+require 'byebug'
 
+DatabaseCleaner.strategy = :transaction
 
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
@@ -25,4 +30,12 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.before :each do
+    DatabaseCleaner.start
+  end
+
+  config.after :each do
+    DatabaseCleaner.clean
+  end
 end

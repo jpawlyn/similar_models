@@ -2,17 +2,17 @@ ActiveRecord::Schema.define do
   self.verbose = false
 
   create_table :authors, force: true do |t|
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :author_posts, force: true do |t|
     t.integer :author_id, null: false
     t.integer :post_id, null: false
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :posts, force: true do |t|
-    t.timestamps
+    t.timestamps null: false
   end
 
   create_table :posts_tags, force: true do |t|
