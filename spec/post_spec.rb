@@ -44,7 +44,6 @@ describe Post do
     let!(:post4) { Post.create! authors: [author1], tags: [tag1, tag2, tag3] }
 
     it 'return posts that have the most authors and tags in common with post' do
-      # note, this test currently only passes with MySQL
       expect(post.most_related_by_author_or_tag.map(&:most_related_by_author_or_tag_count)).to eq([5, 4, 1])
       expect(post.most_related_by_author_or_tag).to eq([post1, post4, post2])
     end
