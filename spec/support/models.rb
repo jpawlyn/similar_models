@@ -1,7 +1,7 @@
 class Post < ActiveRecord::Base
   has_most_related :authors
   has_most_related :tags, as: :most_related_by_tag
-  has_most_related [:authors, :tags], as: :most_related_by_author_or_tag
+  has_most_related :authors, :tags, as: :most_related_by_author_or_tag
 
   has_and_belongs_to_many :tags
   has_many :author_posts

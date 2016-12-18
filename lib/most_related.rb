@@ -10,7 +10,7 @@ module MostRelated
   #   class Post < ActiveRecord::Base
   #     has_most_related :authors
   #     has_most_related :tags, as: :most_related_by_tags
-  #     has_most_related [:authors, :tags], as: :most_related_by_author_or_tag
+  #     has_most_related :authors, :tags, as: :most_related_by_author_or_tag
   #
   #     has_many :author_posts
   #     has_many :authors, through: :author_posts
@@ -37,18 +37,12 @@ module MostRelated
   # The count of the associated models in common is accessible on each returned model
   #   eg post.most_related_count, post.most_related_by_tag_count and post.most_related_by_author_or_tag_count
   #
-  def has_most_related(many_to_many_associations, as: :most_related)
+  def has_most_related(*many_to_many_associations, as: :most_related)
 
     # defaults to 'def most_related'
     define_method as do
       table_name = self.class.table_name
       association_scopes = []
-
-      many_to_many_associations = if many_to_many_associations.is_a?(Array)
-        many_to_many_associations
-      else
-        [many_to_many_associations]
-      end
 
       many_to_many_associations.each do |many_to_many_association|
         assocation = self.class.reflect_on_association(many_to_many_association)
@@ -66,7 +60,7 @@ module MostRelated
         where.not(id: self.id).group("#{table_name}.id").order("#{as}_count DESC")
 
       # if there is only one many-to-many association no need to use UNION sql syntax
-      if association_scopes.size == 1
+      if association_scopes.one?
         scope.merge(association_scopes.first)
       else
         # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/

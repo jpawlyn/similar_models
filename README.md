@@ -23,7 +23,7 @@ Post example
     class Post < ActiveRecord::Base
       has_most_related :authors
       has_most_related :tags, as: :most_related_by_tags
-      has_most_related [:authors, :tags], as: :most_related_by_author_or_tag
+      has_most_related :authors, :tags, as: :most_related_by_author_or_tag
 
       has_many :author_posts
       has_many :authors, through: :author_posts
