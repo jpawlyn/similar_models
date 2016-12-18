@@ -1,6 +1,6 @@
 # MostRelated
 
-`most_related` returns models that have the most associated models in common
+Adds an instance method to an active record model that returns the most related models based on associated models in common. Useful for showing related content on a show page.
 
 ## Installation
 

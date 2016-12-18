@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = MostRelated::VERSION
   spec.authors       = ["Jolyon Pawlyn"]
   spec.email         = ["jpawlyn@gmail.com"]
-  spec.description   = %q{Adds an instance method to a active record model that returns the most related models based on associated models in common}
+  spec.description   = %q{Adds an instance method to an active record model that returns the most related models based on associated models in common}
   spec.summary       = %q{Returns models that have the most associated models in common}
   spec.homepage      = "https://github.com/jpawlyn/most_related"
   spec.license       = "MIT"
