@@ -1,6 +1,6 @@
 # MostRelated
 
-`most_related` returns models that have the most many to many associated models in common
+`most_related` returns models that have the most associated models in common
 
 ## Installation
 
