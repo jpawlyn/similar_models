@@ -54,17 +54,22 @@ module MostRelated
           joins("INNER JOIN #{join_table} ON #{join_table}.#{foreign_key} = #{table_name}.id")
       end
 
-      # with postgres, multiple many-to-many associations doesn't work and here's why
-      # http://dba.stackexchange.com/questions/88988/postgres-error-column-must-appear-in-the-group-by-clause-or-be-used-in-an-aggre
       scope = self.class.select("#{table_name}.*, count(#{table_name}.id) AS #{as}_count").
-        where.not(id: self.id).group("#{table_name}.id").order("#{as}_count DESC")
+        where.not(id: self.id).order("#{as}_count DESC")
+      group_by_clause = 'id'
 
       # if there is only one many-to-many association no need to use UNION sql syntax
       if association_scopes.one?
-        scope.merge(association_scopes.first)
+        scope.merge(association_scopes.first).group(group_by_clause)
       else
+        # with postgres the group by clause has to be different
+        # http://dba.stackexchange.com/questions/88988/postgres-error-column-must-appear-in-the-group-by-clause-or-be-used-in-an-aggre
+        if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
+          group_by_clause = self.class.column_names.join(', ')
+        end
+
         # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/
-        scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}")
+        scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}").group(group_by_clause)
       end
     end
 

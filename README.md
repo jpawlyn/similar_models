@@ -56,8 +56,7 @@ The count of the associated models in common is accessible on each returned mode
     post.most_related_by_tag_count
     post.most_related_by_author_or_tag_count
 
-If multiple associations are used, the syntax is specific to MySql although
-it could be made to work with Postgres.
+Note multiple associations do not work with sqlite.
 
 Because of the use of `group`, pagination is not supported.
 
