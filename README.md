@@ -38,28 +38,28 @@ Post example
       belongs_to :post
     end
 
-To return the posts with the most authors in common with post, in descending order:
+To return the posts with the most authors in common with `post`, in descending order:
 
     post.most_related
 
-To return the posts with the most tags in common with post, in descending order:
+To return the posts with the most tags in common with `post`, in descending order:
 
     post.most_related_by_tag
 
-To return the posts with the most authors and tags in common with post, in descending order:
+To return the posts with the most authors and tags in common with `post`, in descending order:
 
     post.most_related_by_author_or_tag
 
-The count of the many to many associated models in common is accessible on each returned model
+The count of the associated models in common is accessible on each returned model
 
     post.most_related_count
     post.most_related_by_tag_count
     post.most_related_by_author_or_tag_count
 
-If multiple many to many associations are used, the syntax is specific to MySql although
+If multiple associations are used, the syntax is specific to MySql although
 it could be made to work with Postgres.
 
-Because of the use of 'group', pagination is not supported.
+Because of the use of `group`, pagination is not supported.
 
 ## Contributing
 
