@@ -18,8 +18,8 @@ describe Post do
       post3 = Post.create! authors: [author4]
       post4 = Post.create! authors: [author1, author2, author3]
 
-      expect(post.most_related.map(&:most_related_count)).to eq([3, 2, 1])
-      expect(post.most_related).to eq([post4, post2, post1])
+      expect(post.similar_posts.map(&:similar_posts_model_count)).to eq([3, 2, 1])
+      expect(post.similar_posts).to eq([post4, post2, post1])
     end
   end
 
@@ -31,8 +31,8 @@ describe Post do
       post3 = Post.create! tags: [tag4]
       post4 = Post.create! tags: [tag1, tag2, tag3]
 
-      expect(post.most_related_by_tag.map(&:most_related_by_tag_count)).to eq([3, 2, 1])
-      expect(post.most_related_by_tag).to eq([post4, post2, post1])
+      expect(post.similar_posts_by_tag.map(&:similar_posts_by_tag_model_count)).to eq([3, 2, 1])
+      expect(post.similar_posts_by_tag).to eq([post4, post2, post1])
     end
   end
 
@@ -44,8 +44,8 @@ describe Post do
     let!(:post4) { Post.create! authors: [author1], tags: [tag1, tag2, tag3] }
 
     it 'return posts that have the most authors and tags in common with post' do
-      expect(post.most_related_by_author_or_tag.map(&:most_related_by_author_or_tag_count)).to eq([5, 4, 1])
-      expect(post.most_related_by_author_or_tag).to eq([post1, post4, post2])
+      expect(post.similar_posts_by_author_and_tag.map(&:similar_posts_by_author_and_tag_model_count)).to eq([5, 4, 1])
+      expect(post.similar_posts_by_author_and_tag).to eq([post1, post4, post2])
     end
   end
 end

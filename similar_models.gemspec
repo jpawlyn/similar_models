@@ -1,16 +1,16 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'most_related/version'
+require 'similar_models/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "most_related"
-  spec.version       = MostRelated::VERSION
+  spec.name          = "similar_models"
+  spec.version       = SimilarModels::VERSION
   spec.authors       = ["Jolyon Pawlyn"]
   spec.email         = ["jpawlyn@gmail.com"]
-  spec.description   = %q{Adds an instance method to an active record model that returns the most related models based on associated models in common}
+  spec.description   = %q{Adds an instance method to an active record model that returns the most similar models based on associated models in common}
   spec.summary       = %q{Returns models that have the most associated models in common}
-  spec.homepage      = "https://github.com/jpawlyn/most_related"
+  spec.homepage      = "https://github.com/jpawlyn/similar_models"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)

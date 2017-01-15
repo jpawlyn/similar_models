@@ -7,12 +7,12 @@
 # see http://blog.markstarkman.com/blog/2013/01/23/using-sqlite-to-test-active-record-models/
 require 'active_record'
 
-ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'most_related'
+ActiveRecord::Base.establish_connection adapter: 'postgresql', database: 'similar_models'
+# ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'similar_models'
 # ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
-# ActiveRecord::Base.establish_connection adapter: 'postgresql', database: 'most_related'
 load 'support/schema.rb'
 
-require 'most_related'
+require 'similar_models'
 require 'support/models'
 require 'database_cleaner'
 require 'byebug'

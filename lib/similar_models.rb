@@ -1,52 +1,11 @@
-require "most_related/version"
+require 'similar_models/version'
 
-module MostRelated
+module SimilarModels
 
-  # `most_related` returns those models that have the most
-  #  associated models in common
-  #
-  # Post example:
-  #
-  #   class Post < ActiveRecord::Base
-  #     has_many :author_posts
-  #     has_many :authors, through: :author_posts
-  #     has_and_belongs_to_many :tags
-  #
-  #     has_most_related :authors
-  #     has_most_related :tags, as: :most_related_by_tags
-  #     has_most_related :authors, :tags, as: :most_related_by_author_or_tag
-  #   end
-  #
-  #   class Tag < ActiveRecord::Base
-  #   end
-  #
-  #   class Author < ActiveRecord::Base
-  #     has_many :author_posts
-  #   end
-  #
-  #   class AuthorPosts < ActiveRecord::Base
-  #     belongs_to :author
-  #     belongs_to :post
-  #   end
-  #
-  # To return the posts with the most authors in common with `post` in descending order:
-  #   post.most_related
-  #
-  # The returned object is an ActiveRecord::Relation and so chaining of other query methods is possible:
-  #  post.most_related.where('posts.created_at > ?', 10.days.ago).limit(5)
-  #
-  # To return the posts with the most tags in common with `post` in descending order:
-  #   post.most_related_by_tag
-  #
-  # To return the posts with the most authors and tags in common with `post` in descending order:
-  #   post.most_related_by_author_or_tag
-  #
-  # The count of the associated models in common is accessible on each returned model:
-  #   eg post.most_related_count, post.most_related_by_tag_count and post.most_related_by_author_or_tag_count
-  #
-  def has_most_related(*many_to_many_associations, as: :most_related)
+  def has_similar_models(*many_to_many_associations, as: nil)
+    as = "similar_#{model_name.plural}" unless as
 
-    # defaults to 'def most_related'
+    # defaults to 'def similar_{model name}'
     define_method as do
       table_name = self.class.table_name
       association_scopes = []
@@ -61,8 +20,8 @@ module MostRelated
           joins("INNER JOIN #{join_table} ON #{join_table}.#{foreign_key} = #{table_name}.id")
       end
 
-      scope = self.class.select("#{table_name}.*, count(#{table_name}.id) AS #{as}_count").
-        where.not(id: self.id).order("#{as}_count DESC")
+      scope = self.class.select("#{table_name}.*, count(#{table_name}.id) AS #{as}_model_count").
+        where.not(id: self.id).order("#{as}_model_count DESC")
       group_by_clause = 'id'
 
       # if there is only one many-to-many association no need to use UNION sql syntax
@@ -96,4 +55,4 @@ module MostRelated
 end
 
 # Extend ActiveRecord functionality
-ActiveRecord::Base.extend MostRelated
+ActiveRecord::Base.extend SimilarModels
