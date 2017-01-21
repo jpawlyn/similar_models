@@ -11,7 +11,7 @@ ActiveRecord::Schema.define do
     t.timestamps null: false
   end
 
-  create_table :posts, force: true do |t|
+  create_table :posts, primary_key: :alt_id, force: true do |t|
     t.timestamps null: false
   end
 
