@@ -2,7 +2,7 @@
 
 Adds a `similar_{model name plural}` method to an active record model, but can be set to any name using `as: {method name}`. It returns the most similar models of the same class based on associated models in common.
 
-The association(s) have to be many to many, so either habtm or 'has_many though'.
+The association(s) have to be many to many, so either [habtm](http://guides.rubyonrails.org/association_basics.html#the-has-and-belongs-to-many-association) or [has_many :through](http://guides.rubyonrails.org/association_basics.html#the-has-many-through-association).
 
 ## Installation
 
