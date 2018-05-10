@@ -70,6 +70,12 @@ Note multiple associations do not work with sqlite.
 
 Because of the use of `group`, pagination is not supported.
 
+## In conjunction with acts-as-taggable-on
+
+If you use https://github.com/mbleigh/acts-as-taggable-on/#usage and want to find related users say across multiple contexts:
+
+    user.similar_users.where(taggings: { context: %w(skills interests) })
+
 ## Contributing
 
 1. Fork it
