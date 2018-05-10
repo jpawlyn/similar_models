@@ -72,7 +72,7 @@ Because of the use of `group`, pagination is not supported.
 
 ## In conjunction with acts-as-taggable-on
 
-If you use https://github.com/mbleigh/acts-as-taggable-on/#usage and want to find related users say across multiple contexts:
+If you use [mbleigh/acts-as-taggable-on](https://github.com/mbleigh/acts-as-taggable-on/#usage) and want to find related users say across multiple contexts:
 
     user.similar_users.where(taggings: { context: %w(skills interests) })
 
