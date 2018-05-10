@@ -25,14 +25,12 @@ module SimilarModels
 
       scope = self.class.select("#{table_name}.*, count(#{primary_key_ref}) AS #{as}_model_count").
         where.not(primary_key => self.id).order("#{as}_model_count DESC")
-      group_by_clause = primary_key
+      group_by_clause = self.class.column_names.map { |column| "#{table_name}.#{column}"}.join(', ')
 
       # if there is only one many-to-many association no need to use UNION sql syntax
       if association_scopes.one?
         scope.merge(association_scopes.first).group(group_by_clause)
       else
-        group_by_clause = self.class.column_names.join(', ')
-
         # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/
         scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}").group(group_by_clause)
       end
