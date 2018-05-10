@@ -31,11 +31,7 @@ module SimilarModels
       if association_scopes.one?
         scope.merge(association_scopes.first).group(group_by_clause)
       else
-        # with postgres the group by clause has to be different
-        # http://dba.stackexchange.com/questions/88988/postgres-error-column-must-appear-in-the-group-by-clause-or-be-used-in-an-aggre
-        if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
-          group_by_clause = self.class.column_names.join(', ')
-        end
+        group_by_clause = self.class.column_names.join(', ')
 
         # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/
         scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}").group(group_by_clause)

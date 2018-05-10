@@ -8,7 +8,7 @@
 require 'active_record'
 
 ActiveRecord::Base.establish_connection adapter: 'postgresql', database: 'similar_models'
-# ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'similar_models'
+# ActiveRecord::Base.establish_connection adapter: 'mysql2', database: 'similar_models', username: 'test'
 # ActiveRecord::Base.establish_connection adapter: 'sqlite3', database: ':memory:'
 load 'support/schema.rb'
 
@@ -23,6 +23,16 @@ DatabaseCleaner.strategy = :transaction
 RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
+
+  # Many RSpec users commonly either run the entire suite or an individual
+  # file, and it's useful to allow more verbose output when running an
+  # individual spec file.
+  if config.files_to_run.one?
+    # Use the documentation formatter for detailed output,
+    # unless a formatter has already been configured
+    # (e.g. via a command-line flag).
+    config.default_formatter = 'doc'
+  end
 
   # Run specs in random order to surface order dependencies. If you find an
   # order dependency and want to debug it, you can fix the order by providing

@@ -19,12 +19,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version     = '>= 2.1'
-  spec.add_runtime_dependency     'activerecord', '~> 4.2'
-  spec.add_development_dependency 'bundler', '~> 1.13'
+  spec.add_runtime_dependency     'activerecord', '>= 4.2'
+  spec.add_development_dependency 'bundler', '~> 1.16'
   spec.add_development_dependency 'rspec', '~> 3.5'
   spec.add_development_dependency 'database_cleaner', '~>1.5'
   spec.add_development_dependency 'sqlite3', '~>1.3'
-  spec.add_development_dependency 'mysql2', '~>0.4'
-  spec.add_development_dependency 'pg', '~>0.19'
+  spec.add_development_dependency 'mysql2', '~>0.5'
+  spec.add_development_dependency 'pg', '~>1.0'
   spec.add_development_dependency 'byebug', '~>9.0'
 end
