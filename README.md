@@ -8,65 +8,77 @@ The association(s) have to be many to many, so either [habtm](http://guides.ruby
 
 Add this line to your application's Gemfile:
 
-    gem 'similar_models'
+```sh
+gem 'similar_models'
+```
 
 And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install similar_models
+```sh
+$ bundle
+```
 
 ## Usage
 
 Post example
 
-    class Post < ActiveRecord::Base
-      has_many :author_posts
-      has_many :authors, through: :author_posts
-      has_and_belongs_to_many :tags
+```ruby
+class Post < ActiveRecord::Base
+    has_many :author_posts
+    has_many :authors, through: :author_posts
+    has_and_belongs_to_many :tags
 
-      has_similar_models :authors
-      has_similar_models :tags, as: :similar_posts_by_tag
-      has_similar_models :authors, :tags, as: :similar_posts_by_author_and_tag
-    end
+    has_similar_models :authors
+    has_similar_models :tags, as: :similar_posts_by_tag
+    has_similar_models :authors, :tags, as: :similar_posts_by_author_and_tag
+end
 
-    class Tag < ActiveRecord::Base
-    end
+class Tag < ActiveRecord::Base
+end
 
-    class Author < ActiveRecord::Base
-      has_many :author_posts
-    end
+class Author < ActiveRecord::Base
+    has_many :author_posts
+end
 
-    class AuthorPosts < ActiveRecord::Base
-      belongs_to :author
-      belongs_to :post
-    end
+class AuthorPosts < ActiveRecord::Base
+    belongs_to :author
+    belongs_to :post
+end
+```
 
 To return the posts with the most authors in common with `post` in descending order:
 
-    post.similar_posts
+```ruby
+post.similar_posts
+```
 
 The returned object is an ActiveRecord::Relation and so chaining of other query methods is possible:
 
-    post.similar_posts.where('posts.created_at > ?', 10.days.ago).limit(5)
+```ruby
+post.similar_posts.where(posts.created_at: 10.days.ago..).limit(5)
+```
 
 To return the posts with the most tags in common with `post` in descending order:
 
-    post.similar_posts_by_tag
+```ruby
+post.similar_posts_by_tag
+```
 
 To return the posts with the most authors and tags in common with `post` in descending order:
 
-    post.similar_posts_by_author_and_tag
+```ruby
+post.similar_posts_by_author_and_tag
+```
 
 The count of the associated models in common is accessible on each returned model:
 
-    post.similar_posts_model_count
-    post.similar_posts_by_tag_model_count
-    post.similar_posts_by_author_and_tag_model_count
+```ruby
+post.similar_posts_model_count
+post.similar_posts_by_tag_model_count
+post.similar_posts_by_author_and_tag_model_count
+```
 
-Note multiple associations do not work with sqlite.
+**Note multiple associations do not work with sqlite.**
 
 Because of the use of `group`, pagination is not supported.
 
@@ -74,7 +86,9 @@ Because of the use of `group`, pagination is not supported.
 
 If you use [mbleigh/acts-as-taggable-on](https://github.com/mbleigh/acts-as-taggable-on/#usage) and want to find related users say across multiple contexts:
 
-    user.similar_users.where(taggings: { context: %w(skills interests) })
+```ruby
+user.similar_users.where(taggings: { context: %w(skills interests) })
+```
 
 ## Contributing
 

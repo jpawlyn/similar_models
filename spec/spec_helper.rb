@@ -15,7 +15,7 @@ load 'support/schema.rb'
 require 'similar_models'
 require 'support/models'
 require 'database_cleaner'
-require 'byebug'
+require 'debug'
 
 DatabaseCleaner.strategy = :transaction
 

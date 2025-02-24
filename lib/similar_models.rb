@@ -31,7 +31,6 @@ module SimilarModels
       if association_scopes.one?
         scope.merge(association_scopes.first).group(group_by_clause)
       else
-        # see http://blog.ubersense.com/2013/09/27/tech-talk-unioning-scoped-queries-in-rails/
         scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}").group(group_by_clause)
       end
     end
