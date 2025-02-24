@@ -2,7 +2,7 @@
 
 Adds a `similar_{model name plural}` method to an active record model, but can be set to any name using `as: {method name}`. It returns the most similar models of the same class based on associated models in common.
 
-The association(s) have to be many to many, so either [habtm](http://guides.rubyonrails.org/association_basics.html#the-has-and-belongs-to-many-association) or [has_many :through](http://guides.rubyonrails.org/association_basics.html#the-has-many-through-association).
+The association(s) have to be many to many, so either [habtm](https://guides.rubyonrails.org/association_basics.html#has-and-belongs-to-many) or [has_many :through](https://guides.rubyonrails.org/association_basics.html#has-many-through).
 
 ## Installation
 
@@ -23,26 +23,26 @@ $ bundle
 Post example
 
 ```ruby
-class Post < ActiveRecord::Base
-    has_many :author_posts
-    has_many :authors, through: :author_posts
-    has_and_belongs_to_many :tags
+class Post < ApplicationRecord
+  has_many :author_posts
+  has_many :authors, through: :author_posts
+  has_and_belongs_to_many :tags
 
-    has_similar_models :authors
-    has_similar_models :tags, as: :similar_posts_by_tag
-    has_similar_models :authors, :tags, as: :similar_posts_by_author_and_tag
+  has_similar_models :authors
+  has_similar_models :tags, as: :similar_posts_by_tag
+  has_similar_models :authors, :tags, as: :similar_posts_by_author_and_tag
 end
 
-class Tag < ActiveRecord::Base
+class Tag < ApplicationRecord
 end
 
-class Author < ActiveRecord::Base
-    has_many :author_posts
+class Author < ApplicationRecord
+  has_many :author_posts
 end
 
-class AuthorPosts < ActiveRecord::Base
-    belongs_to :author
-    belongs_to :post
+class AuthorPosts < ApplicationRecord
+  belongs_to :author
+  belongs_to :post
 end
 ```
 
