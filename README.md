@@ -4,9 +4,11 @@ Adds a `similar_#{model_name.plural}` instance and class method to an active rec
 
 The instance method returns models that have associated models in common ordered by most in common first.
 
+A practical example for this could be linking to related blog posts when rendering an individual blog post. Related blog posts could be related by author, tag or author and tag combined.
+
 The class method returns models ordered by most associated models in common.
 
-If the commonality count is the same then a second order clause of `created_at` if present takes precedence.
+If the commonality count is the same then a second order clause of `created_at` takes precedence if present.
 
 The association(s) have to be many to many, so either [habtm](https://guides.rubyonrails.org/association_basics.html#has-and-belongs-to-many) or [has_many :through](https://guides.rubyonrails.org/association_basics.html#has-many-through).
 

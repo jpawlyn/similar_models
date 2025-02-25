@@ -39,8 +39,29 @@ module SimilarModels
     #   INNER JOIN author_posts ON author_posts.post_id = posts.alt_id
     #     WHERE "posts"."alt_id" != ? AND
     #       author_posts.author_id IN (select author_posts.author_id from author_posts where author_posts.post_id = ?)
-    #   GROUP BY posts.alt_id, posts.created_at, posts.updated_at
+    #   GROUP BY posts.alt_id
     #   ORDER BY similar_posts_commonality_count DESC, created_at DESC
+    #
+    # example sql query for two many to many associations:
+    #
+    # SELECT posts.*, count(posts.alt_id) AS similar_posts_by_author_and_tag_commonality_count
+    #   FROM (
+    #     (SELECT "posts".* FROM "posts"
+    #       INNER JOIN author_posts ON author_posts.post_id = posts.alt_id
+    #       WHERE (author_posts.author_id IN
+    #         (select author_posts.author_id from author_posts where author_posts.post_id = ?)
+    #       )
+    #     )
+    #   UNION ALL
+    #     (SELECT "posts".* FROM "posts"
+    #       INNER JOIN posts_tags ON posts_tags.post_id = posts.alt_id
+    #       WHERE (posts_tags.tag_id IN
+    #         (select posts_tags.tag_id from posts_tags where posts_tags.post_id = ?)
+    #       )
+    #     )
+    #   )
+    #   AS posts WHERE "posts"."alt_id" != ? GROUP BY posts.alt_id, posts.created_at, posts.updated_at
+    #   ORDER BY similar_posts_by_author_and_tag_commonality_count DESC, created_at DESC
     #
     define_method as do
       table_name = self.class.table_name
@@ -63,12 +84,12 @@ module SimilarModels
       order_clause += ", created_at DESC" if self.class.column_names.include?('created_at')
       scope = self.class.select("#{table_name}.*, count(#{primary_key_ref}) AS #{as}_commonality_count").
         where.not(primary_key => self.id).order(order_clause)
-      group_by_clause = self.class.column_names.map { |column| "#{table_name}.#{column}"}.join(', ')
 
       # if there is only one many-to-many association no need to use UNION sql syntax
       if association_scopes.one?
-        scope.merge(association_scopes.first).group(group_by_clause)
+        scope.merge(association_scopes.first).group(primary_key_ref)
       else
+        group_by_clause = self.class.column_names.map { |column| "#{table_name}.#{column}"}.join(', ')
         scope.from("((#{association_scopes.map(&:to_sql).join(') UNION ALL (')})) AS #{table_name}").group(group_by_clause)
       end
     end
