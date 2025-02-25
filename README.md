@@ -8,6 +8,8 @@ A practical example for this could be linking to related blog posts when renderi
 
 The class method returns models ordered by most associated models in common.
 
+A practical example for this could be displaying a list of blog post authors who have written many posts and/or have written posts with other authors who themselves have written many posts.
+
 If the commonality count is the same then a second order clause of `created_at` takes precedence if present.
 
 The association(s) have to be many to many, so either [habtm](https://guides.rubyonrails.org/association_basics.html#has-and-belongs-to-many) or [has_many :through](https://guides.rubyonrails.org/association_basics.html#has-many-through).
@@ -20,7 +22,7 @@ Add this line to your application's Gemfile:
 gem 'similar_models'
 ```
 
-And then execute:
+And then run:
 
 ```sh
 $ bundle
