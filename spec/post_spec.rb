@@ -71,6 +71,7 @@ describe Post do
 
     describe '#similar_posts_by_author_and_tag' do
       it 'return posts that have authors and tags in common with `post` ordered by most in common first' do
+        # fails for sqlite since it does not appear to support `group by` for `union` queries
         expect(post.similar_posts_by_author_and_tag.map(&:similar_posts_by_author_and_tag_commonality_count)).to eq([5, 4, 1])
         expect(post.similar_posts_by_author_and_tag).to eq([post1, post4, post2])
       end
