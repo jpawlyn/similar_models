@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = SimilarModels::VERSION
   spec.authors       = ["Jolyon Pawlyn"]
   spec.email         = ["jpawlyn@gmail.com"]
-  spec.description   = %q{Adds an instance method to an active record model that returns the most similar models based on associated models in common}
-  spec.summary       = %q{Returns models that have the most associated models in common}
+  spec.description   = %q{Adds a `similar_#{model_name.plural}` instance and class method to an active record model and returns models based on associated models in common ordered by most in common first}
+  spec.summary       = %q{Returns models that have associated models in common ordered by most in common first}
   spec.homepage      = "https://github.com/jpawlyn/similar_models"
   spec.license       = "MIT"
 

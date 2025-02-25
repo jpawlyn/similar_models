@@ -1,6 +1,12 @@
 # Similar Models
 
-Adds a `similar_{model name plural}` method to an active record model, but can be set to any name using `as: {method name}`. It returns the most similar models of the same class based on associated models in common.
+Adds a `similar_#{model_name.plural}` instance and class method to an active record model, but can be set to any name using `as: {method name}`.
+
+The instance method returns models that have associated models in common ordered by most in common first.
+
+The class method returns models ordered by most associated models in common.
+
+If the commonality count is the same then a second order clause of `created_at` if present takes precedence.
 
 The association(s) have to be many to many, so either [habtm](https://guides.rubyonrails.org/association_basics.html#has-and-belongs-to-many) or [has_many :through](https://guides.rubyonrails.org/association_basics.html#has-many-through).
 
@@ -46,41 +52,57 @@ class AuthorPosts < ApplicationRecord
 end
 ```
 
-To return the posts with the most authors in common with `post` in descending order:
+To return posts with authors in common with the `post` model by most in common first:
 
 ```ruby
 post.similar_posts
 ```
 
+To return posts ordered by most authors in common:
+```ruby
+Post.similar_posts
+```
+
 The returned object is an ActiveRecord::Relation and so chaining of other query methods is possible:
 
 ```ruby
-post.similar_posts.where(posts.created_at: 10.days.ago..).limit(5)
+post.similar_posts.where(created_at: 10.days.ago..).limit(5)
 ```
 
-To return the posts with the most tags in common with `post` in descending order:
+To return posts with tags in common with the `post` model by most in common first:
 
 ```ruby
 post.similar_posts_by_tag
 ```
 
-To return the posts with the most authors and tags in common with `post` in descending order:
+To return posts ordered by most tags in common:
+```ruby
+Post.similar_posts_by_tag
+```
+
+To return posts with the authors and tags in common with the `post` model by most in common first:
 
 ```ruby
 post.similar_posts_by_author_and_tag
 ```
 
+To return posts ordered by most authors and tags in common:
+
+```ruby
+Post.similar_posts_by_author_and_tag
+```
+
 The count of the associated models in common is accessible on each returned model:
 
 ```ruby
-post.similar_posts_model_count
-post.similar_posts_by_tag_model_count
-post.similar_posts_by_author_and_tag_model_count
+post.similar_posts_commonality_count
+post.similar_posts_by_tag_commonality_count
+post.similar_posts_by_author_and_tag_commonality_count
 ```
 
-**Note multiple associations do not work with sqlite.**
+**Note multiple associations for the instance method do not work with sqlite.**
 
-Because of the use of `group`, pagination is not supported.
+**Pagination is not supported on the instance method due to the use of `group by`.**
 
 ## In conjunction with acts-as-taggable-on
 
